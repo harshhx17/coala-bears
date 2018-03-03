@@ -22,6 +22,7 @@ class DockerfileLintBear:
     AUTHORS_EMAILS = {'coala-devel@googlegroups.com'}
     LICENSE = 'AGPL-3.0'
     CAN_DETECT = {'Syntax', 'Smell'}
+    SEE_MORE = 'https://github.com/projectatomic/dockerfile_lint'
 
     severity_map = {
         'error': RESULT_SEVERITY.MAJOR,
