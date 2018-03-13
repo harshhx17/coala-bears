@@ -12,8 +12,6 @@ deps_infer="m4 opam"
 case $CIRCLE_BUILD_IMAGE in
   "ubuntu-12.04")
     USE_PPAS="true"
-    # The Circle provided Go is too old
-
     ;;
   "ubuntu-14.04")
     # Use xenial, needed to replace outdated julia provided by Circle CI
@@ -21,7 +19,6 @@ case $CIRCLE_BUILD_IMAGE in
     # Work around lack of systemd on trusty, which xenial's lxc-common expects
     echo '#!/bin/sh' | sudo tee /usr/bin/systemd-detect-virt > /dev/null
     sudo chmod a+x /usr/bin/systemd-detect-virt
-
     # Add packages which are already in the precise image
     deps="$deps g++-4.9 libxml2-utils php-cli php7.0-cli php-codesniffer"
     # gfortran on CircleCI precise is 4.6 and R irlba compiles ok,
@@ -46,7 +43,7 @@ if [ "$USE_PPAS" = "true" ]; then
   sudo add-apt-repository -y ppa:marutter/rdev
   sudo add-apt-repository -y ppa:staticfloat/juliareleases
   sudo add-apt-repository -y ppa:staticfloat/julia-deps
-  sudo add-apt-repository -y ppa:ondrej/golang
+  # sudo add-apt-repository -y ppa:gophers/archive
   sudo add-apt-repository -y ppa:avsm/ppa
 elif [ -n "$USE_PPAS" ]; then
   for ppa in $USE_PPAS; do
