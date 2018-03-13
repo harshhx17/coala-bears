@@ -22,8 +22,6 @@ case $CIRCLE_BUILD_IMAGE in
     echo '#!/bin/sh' | sudo tee /usr/bin/systemd-detect-virt > /dev/null
     sudo chmod a+x /usr/bin/systemd-detect-virt
 
-    # The apt go provided by 14.04 is too old
-    deps=${deps/golang-go/}
     # Add packages which are already in the precise image
     deps="$deps g++-4.9 libxml2-utils php-cli php7.0-cli php-codesniffer"
     # gfortran on CircleCI precise is 4.6 and R irlba compiles ok,
