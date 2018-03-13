@@ -57,6 +57,9 @@ jobs:
           name: AptDependencies
           command:  bash .ci/deps.apt.sh
       - run:
+          name: GeneralDependencies
+          command: bash .ci/deps.sh
+      - run:
          name: DependenciesPip
          command:   |
                     apt-get install libssl-dev libxml2 -y
@@ -80,9 +83,6 @@ jobs:
       - run:
          name: CabalDependencies
          command:  bash .ci/deps.cabal.sh
-      - run:
-          name: GeneralDependencies
-          command: bash .ci/deps.sh
       - run:
          name: CoalaDependencies
          command:   bash .ci/deps.coala-bears.sh
