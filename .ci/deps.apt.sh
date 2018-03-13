@@ -13,7 +13,7 @@ case $CIRCLE_BUILD_IMAGE in
   "ubuntu-12.04")
     USE_PPAS="true"
     # The Circle provided Go is too old
-    sudo mv /usr/local/go /usr/local/circleci-go
+
     ;;
   "ubuntu-14.04")
     # Use xenial, needed to replace outdated julia provided by Circle CI
