@@ -11,7 +11,12 @@ jobs:
     steps:
       - checkout
       - restore_cache:
+      - run:
+          name: dependencies
           key: dependency-cache-{{checksum "requirements.txt"}}
+          command:  |
+                    sudo apt-get update
+                    sudo apt-get install -y python3.4-venv curl git
       - run:
           name: virtual-env
           command: |
