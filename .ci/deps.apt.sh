@@ -12,7 +12,8 @@ deps_infer="m4 opam"
 case $CIRCLE_BUILD_IMAGE in
   "ubuntu-12.04")
     USE_PPAS="true"
-    ;;
+    deps=${deps/golang-go/}
+    deps="$deps golang-1.9-go";;
   "ubuntu-14.04")
     # Use xenial, needed to replace outdated julia provided by Circle CI
     ADD_APT_UBUNTU_RELEASE=xenial
@@ -43,7 +44,7 @@ if [ "$USE_PPAS" = "true" ]; then
   sudo add-apt-repository -y ppa:marutter/rdev
   sudo add-apt-repository -y ppa:staticfloat/juliareleases
   sudo add-apt-repository -y ppa:staticfloat/julia-deps
-  # sudo add-apt-repository -y ppa:gophers/archive
+  sudo add-apt-repository -y ppa:gophers/archive
   sudo add-apt-repository -y ppa:avsm/ppa
 elif [ -n "$USE_PPAS" ]; then
   for ppa in $USE_PPAS; do
