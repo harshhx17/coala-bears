@@ -11,7 +11,7 @@ jobs:
     steps:
       - checkout
       - restore_cache:
-          key: dependency-cache-{{checksum "requirements.txt"}}
+          key: dependency-cache-{{checksum "requirements.txt"+"coala"}}
       - run:
           name: dependencies
           command: |
@@ -100,9 +100,6 @@ jobs:
       - run:
          name: RDependencies
          command:   bash .ci/deps.r.sh
-      # - run:
-      #     name: GeneralDependencies
-      #     command: bash .ci/deps.sh
       - run:
          name: CoalaDependencies
          command:   bash .ci/deps.coala-bears.sh
@@ -142,7 +139,7 @@ jobs:
                         python setup.py docs
                       fi
       - save_cache:
-          key: dependency-cache-{{ checksum "requirements.txt" }}
+          key: dependency-cache-{{ checksum "requirements.txt"+"coala"}}
           paths:
             - "docs/_build"
             - "$HOME/.pyenv/versions/3.4.3"
@@ -163,6 +160,9 @@ jobs:
             - "$HOME/.julia"
             - "$HOME/.local/tailor/"
             - "$HOME/.venv"
+      - run:
+          name: GeneralDependencies
+          command: bash .ci/deps.sh
       - run:
           name: Tests
           when: always
