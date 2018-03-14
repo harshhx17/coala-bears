@@ -101,9 +101,9 @@ jobs:
       - run:
          name: RDependencies
          command:   bash .ci/deps.r.sh
-      - run:
-          name: GeneralDependencies
-          command: bash .ci/deps.sh
+      # - run:
+      #     name: GeneralDependencies
+      #     command: bash .ci/deps.sh
       - run:
          name: CoalaDependencies
          command:   bash .ci/deps.coala-bears.sh
