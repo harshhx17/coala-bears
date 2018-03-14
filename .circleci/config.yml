@@ -36,7 +36,7 @@ jobs:
           name: virtual-env
           command: |
                     if [ ! -d "$HOME/.venv" ]; then
-                      python3 -m venv ~/.venv 
+                      python3 -m venv ~/.venv
                     fi
                     echo 'source $HOME/.venv/bin/activate' >> $BASH_ENV
       - run:
@@ -55,7 +55,7 @@ jobs:
                     mkdir -p $HOME/.RLibrary
                     curl -o- https://raw.githubusercontent.com/creationix/nvm/v0.33.8/install.sh | bash
                     export "NVM_DIR=$HOME/.nvm"
-                    [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"                    
+                    [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
                     nvm install 8
                     nvm alias default node
                     echo 'source $NVM_DIR/nvm.sh' >> $BASH_ENV
@@ -160,6 +160,9 @@ jobs:
             - "$HOME/.julia"
             - "$HOME/.local/tailor/"
             - "$HOME/.venv"
+      - run:
+          name: GeneralDependencies
+          command: bash .ci/deps.sh
       - run:
           name: Tests
           when: always
