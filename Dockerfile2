@@ -1,0 +1,41 @@
+FROM 6365489bafe6
+
+RUN gpg --keyserver hkp://keys.gnupg.net --recv-keys 409B6B1796C275462A1703113804BB82D39DC0E3 7D2BAF1CF37B13E2069D6956105BD0E739499BDB
+RUN curl -sSL https://get.rvm.io | bash -s stable
+RUN bash -c ". /etc/profile.d/rvm.sh && rvm install 2.2.2"
+RUN bash -c "rvm use 2.2.2 --default"
+RUN bash ruby -v
+RUN bash gem install bundler
+RUN bash .ci/deps.sh
+
+RUN bash .ci/deps.cabal.sh
+
+RUN git clone https://github.com/pyenv/pyenv.git /tmp/pyenv
+RUN if [ ! -d "$HOME/.pyenv" ]; then mkdir -p ~/.pyenv ; fi
+RUN cp -R /tmp/pyenv/* ~/.pyenv
+ENV PYENV_ROOT=$HOME/.pyenv
+ENV PATH=$PYENV_ROOT/bin:$PATH
+RUN eval "$(pyenv init -)"
+
+RUN bash .ci/deps.pip.sh
+
+RUN bash .ci/deps.java.sh
+
+RUN bash .ci/deps.opam.sh
+
+RUN bash .ci/deps.r.sh
+
+RUN bash .ci/deps.coala-bears.sh
+
+RUN bash .ci/tests.sh
+
+RUN codecov
+
+RUN coala-ci -L DEBUG
+
+RUN python setup.py bdist_wheel
+
+RUN  pip install $(ls ./dist/*.whl)"[alldeps]"
+
+RUN pip install -r docs-requirements.txt
+RUN python setup.py docs
