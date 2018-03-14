@@ -4,5 +4,5 @@ coala>=0.12.0.dev20170828055500
 # Dependencies inherited from coala
 # coala_utils
 # dependency_management
-# requests
+# requests 
 -r bear-requirements.txt
