@@ -79,6 +79,9 @@ jobs:
           name: AptDependencies
           command:  bash .ci/deps.apt.sh
       - run:
+          name: GeneralDependencies
+          command: bash .ci/deps.sh
+      - run:
          name: CabalDependencies
          command:  bash .ci/deps.cabal.sh
       - run:
@@ -160,9 +163,6 @@ jobs:
             - "$HOME/.julia"
             - "$HOME/.local/tailor/"
             - "$HOME/.venv"
-      - run:
-          name: GeneralDependencies
-          command: bash .ci/deps.sh
       - run:
           name: Tests
           when: always
