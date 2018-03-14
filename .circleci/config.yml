@@ -16,7 +16,7 @@ jobs:
           name: dependencies
           command: |
                     sudo apt-get update
-                    sudo apt-get install -y software-properties-common python-software-properties 
+                    sudo apt-get install -y software-properties-common python-software-properties curl
                     sudo add-apt-repository -y ppa:hvr/ghc
                     sudo add-apt-repository -y ppa:ubuntu-toolchain-r/test
                     sudo add-apt-repository -y ppa:avsm/ppa
@@ -24,7 +24,7 @@ jobs:
                     curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | sudo apt-key add -
                     echo "deb https://dl.yarnpkg.com/debian/ stable main" | sudo tee /etc/apt/sources.list.d/yarn.list
                     sudo apt-get update
-                    sudo apt-get install -y python3.4-venv curl git bzip2 \
+                    sudo apt-get install -y python3.4-venv git bzip2 \
                       cabal-install-1.24 clang-3.4 libreadline-dev libyaml-dev\
                       gfortran ghc happy indent libblas-dev liblapack-dev \
                       libperl-critic-perl libxml2-utils menhir php-codesniffer \
@@ -101,9 +101,9 @@ jobs:
       - run:
          name: RDependencies
          command:   bash .ci/deps.r.sh
-      # - run:
-      #     name: GeneralDependencies
-      #     command: bash .ci/deps.sh
+      - run:
+          name: GeneralDependencies
+          command: bash .ci/deps.sh
       - run:
          name: CoalaDependencies
          command:   bash .ci/deps.coala-bears.sh
