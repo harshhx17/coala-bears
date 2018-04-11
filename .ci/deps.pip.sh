@@ -13,8 +13,8 @@ esac
 
 for dep_version in "${dep_versions[@]}" ; do
   pyenv install -ks $dep_version
-  pyenv local $dep_version 2.7.10
-  # pyenv local $dep_version
+  # pyenv local $dep_version 2.7.10
+  pyenv local $dep_version
   python --version
   source .ci/env_variables.sh
 

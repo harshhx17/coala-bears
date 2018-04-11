@@ -53,6 +53,7 @@ jobs:
                             echo 'export PATH=/usr/lib/go-1.9/bin:$PATH' >> $BASH_ENV
                             echo 'export NVM_DIR=$HOME/.nvm' >> $BASH_ENV
                             echo 'source $NVM_DIR/nvm.sh' >> $BASH_ENV
+                            echo 'export CIRCLE_NODE_INDEX=1' >> $BASH_ENV
                             echo 'export CIRCLE_BUILD_IMAGE=ubuntu-12.04' >> $BASH_ENV
                             echo 'export PATH=/opt/cabal/bin:$PATH' >> $BASH_ENV
                             echo 'export PATH=$HOME/coala-bears/node_modules/.bin:$PATH' >> $BASH_ENV
@@ -137,15 +138,6 @@ jobs:
                 when: always
                 command: |
                             pip install $(ls ./dist/*.whl)"[alldeps]"
-
-            - run:
-                name: Documents
-                when: always
-                command: |
-                            echo $CIRCLE_NODE_INDEX
-                            if [ $CIRCLE_NODE_INDEX == 1 ] ; then
-                            pip install -r docs-requirements.txt
-                            fi
 
             - run:
                 name: SetupDocs
