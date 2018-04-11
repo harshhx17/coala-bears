@@ -48,7 +48,8 @@ jobs:
                             wget https://www.python.org/ftp/python/2.7.10/Python-2.7.10.tgz
                             tar -zxvf  Python-2.7.10.tgz
                             sudo ./Python-2.7.10/configure
-                            sudo make altinstall
+                            sudo make altinstall #can also try sudo make install(will remove python2.7.6)
+                            which python
                             python2.7 --version
                             sudo rm -rf /var/cache/apt/archives
                             sudo ln -s $HOME/.apt-cache /var/cache/apt/archives
@@ -78,11 +79,11 @@ jobs:
                             echo 'export R_LIB_USER=$HOME/.RLibrary' >> $BASH_ENV
 
             - run:
-                name: AptDependencies
+                name: aptDependencies
                 command:  bash .ci/deps.apt.sh
 
             - run:
-                name: GeneralDependencies
+                name: generalDependencies
                 command: |
                             gpg --keyserver hkp://keys.gnupg.net --recv-keys 409B6B1796C275462A1703113804BB82D39DC0E3 7D2BAF1CF37B13E2069D6956105BD0E739499BDB
                             curl -sSL https://get.rvm.io | bash -s stable
@@ -94,11 +95,11 @@ jobs:
                             bash .ci/deps.sh
 
             - run:
-                name: CabalDependencies
+                name: cabalDependencies
                 command:  bash .ci/deps.cabal.sh
 
             - run:
-                name: DependenciesPip
+                name: dependenciesPip
                 command:   |
                             git clone https://github.com/pyenv/pyenv.git /tmp/pyenv
                             if [ ! -d "$HOME/.pyenv" ]; then mkdir -p ~/.pyenv ; fi
@@ -110,11 +111,11 @@ jobs:
                             bash .ci/deps.pip.sh
 
             - run:
-                name: JavaDependencies
+                name: javaDependencies
                 command: bash .ci/deps.java.sh
 
             - run:
-                name: OpamDependencies
+                name: opamDependencies
                 command:   bash .ci/deps.opam.sh
 
             - run:
@@ -122,35 +123,35 @@ jobs:
                 command:   bash .ci/deps.r.sh
 
             - run:
-                name: CoalaDependencies
+                name: bearsDependencies
                 command:   bash .ci/deps.coala-bears.sh
 
             - run:
-                name: Codecov
+                name: codecov
                 when: always
                 command: codecov
 
             - run:
-                name: Coalaci
+                name: coala-ci
                 when: always
                 command: coala-ci -L DEBUG
 
             - run:
-                name: Setup
+                name: setup
                 when: always
                 command: python setup.py bdist_wheel
 
             - run:
-                name: AllDependencies
+                name: allDependencies
                 when: always
                 command: pip install $(ls ./dist/*.whl)"[alldeps]"
 
             - run:
-                name: Tests
+                name: tests
                 when: always
                 command: bash .ci/tests.sh
             - run:
-                name: SetupDocs
+                name: sphinx-build
                 when: always
                 command: |
                             echo $CIRCLE_NODE_INDEX
