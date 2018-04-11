@@ -93,6 +93,8 @@ jobs:
                     cp -R /tmp/pyenv/* ~/.pyenv
                     export PYENV_ROOT="$HOME/.pyenv"
                     export PATH="$PYENV_ROOT/bin:$PATH"
+                    echo 'export PYENV_ROOT=$HOME/.pyenv' >> $BASH_ENV
+                    echo 'export PATH=$PYENV_ROOT/bin:$PATH' >> $BASH_ENV                    
                     eval "$(pyenv init -)"
                     bash .ci/deps.pip.sh
       - run:
