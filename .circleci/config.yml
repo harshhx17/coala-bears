@@ -149,6 +149,14 @@ jobs:
                 name: Tests
                 when: always
                 command: bash .ci/tests.sh
+            - run:
+                name: SetupDocs
+                when: always
+                command: |
+                            echo $CIRCLE_NODE_INDEX
+                            if [ $CIRCLE_NODE_INDEX == 1 ] ; then
+                                python setup.py docs
+                            fi
 
             - save_cache:
                 key: dependency-cache-{{ checksum "requirements.txt"}}
@@ -181,10 +189,7 @@ jobs:
             CIRCLE_NODE_INDEX = 1
 
         steps: *build
-            - run:
-                name: SetupDocs
-                when: always
-                command: python setup.py docs
+
 workflows:
     version: 2
     test:
