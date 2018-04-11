@@ -5,175 +5,187 @@ jobs:
         - image: circleci/jdk8:0.1.1
 
         steps: &build
-        - checkout
-        - restore_cache:
-            key: dependency-cache-{{checksum "requirements.txt"}}
-        - run:
-            name: dependencies
-            command: |
-                        sudo apt-get update
-                        sudo apt-get install -y software-properties-common python-software-properties curl
-                        sudo add-apt-repository -y ppa:hvr/ghc
-                        sudo add-apt-repository -y ppa:ubuntu-toolchain-r/test
-                        sudo add-apt-repository -y ppa:avsm/ppa
-                        curl -sL https://deb.nodesource.com/setup_8.x | sudo -E bash  -
-                        curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | sudo apt-key add -
-                        echo "deb https://dl.yarnpkg.com/debian/ stable main" | sudo tee /etc/apt/sources.list.d/yarn.list
-                        sudo apt-get update
-                        sudo apt-get install -y python3.4-venv git bzip2 \
-                        cabal-install-1.24 clang-3.4 libreadline-dev libyaml-dev\
-                        gfortran ghc happy indent libblas-dev liblapack-dev \
-                        libperl-critic-perl libxml2-utils menhir php-codesniffer \
-                        build-essential ruby texinfo libbz2-dev libcurl4-openssl-dev \
-                        libexpat-dev libncurses-dev zlib1g-dev git-core libssl-dev \
-                        libsqlite3-dev sqlite3 libxslt1-dev libffi-dev yarn python3-dev \
-                        libgdbm-dev libncurses5-dev automake libtool bison
-        - run:
-            name: virtual-env
-            command: |
-                        if [ ! -d "$HOME/.venv" ]; then
-                        python3 -m venv ~/.venv
-                        fi
-                        echo 'source $HOME/.venv/bin/activate' >> $BASH_ENV
-        - run:
-            name: pre
-            command: |
-                        sudo rm -rf /var/cache/apt/archives
-                        sudo ln -s $HOME/.apt-cache /var/cache/apt/archives
-                        mkdir -p $HOME/.apt-cache/partial
-                        mkdir -p $HOME/.RLibrary
-                        curl -o- https://raw.githubusercontent.com/creationix/nvm/v0.33.8/install.sh | bash
-                        export "NVM_DIR=$HOME/.nvm"
-                        [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
-                        nvm install 6.10.2
-                        nvm alias default node
-                        echo 'export PATH=/usr/lib/go-1.9/bin:$PATH' >> $BASH_ENV
-                        echo 'export NVM_DIR=$HOME/.nvm' >> $BASH_ENV
-                        echo 'source $NVM_DIR/nvm.sh' >> $BASH_ENV
-                        echo 'export CIRCLE_BUILD_IMAGE=ubuntu-12.04' >> $BASH_ENV
-                        echo 'export PATH=/opt/cabal/bin:$PATH' >> $BASH_ENV
-                        echo 'export PATH=$HOME/coala-bears/node_modules/.bin:$PATH' >> $BASH_ENV
-                        echo 'export PATH=$HOME/coala-bears/vendor/bin:$PATH' >> $BASH_ENV
-                        echo 'export LINTR_COMMENT_BOT=false' >> $BASH_ENV
-                        echo 'export PATH=$HOME/dart-sdk/bin:$PATH' >> $BASH_ENV
-                        echo 'export PATH=$HOME/.cabal/bin:$PATH' >> $BASH_ENV
-                        echo 'export PATH=$HOME/infer-linux64-v0.7.0/infer/bin:$PATH' >> $BASH_ENV
-                        echo 'export PATH=$HOME/pmd-bin-5.4.1/bin:$PATH' >> $BASH_ENV
-                        echo 'export PATH=$HOME/bakalint-0.4.0:$PATH' >> $BASH_ENV
-                        echo 'export PATH=$HOME/elm-format-0.18:$PATH' >> $BASH_ENV
-                        echo 'export PATH=$HOME/.local/tailor/tailor-latest/bin:$PATH' >> $BASH_ENV
-                        echo 'export PATH=$HOME/phpmd:$PATH' >> $BASH_ENV
-                        echo 'export R_LIB_USER=$HOME/.RLibrary' >> $BASH_ENV
-        - run:
-            name: AptDependencies
-            command:  bash .ci/deps.apt.sh
-        - run:
-            name: GeneralDependencies
-            command: |
-                        gpg --keyserver hkp://keys.gnupg.net --recv-keys 409B6B1796C275462A1703113804BB82D39DC0E3 7D2BAF1CF37B13E2069D6956105BD0E739499BDB
-                        curl -sSL https://get.rvm.io | bash -s stable
-                        source /etc/profile.d/rvm.sh
-                        rvm install 2.2.2
-                        rvm use 2.2.2 --default
-                        ruby -v
-                        gem install bundler
-                        bash .ci/deps.sh
-        - run:
-            name: CabalDependencies
-            command:  bash .ci/deps.cabal.sh
-        - run:
-            name: DependenciesPip
-            command:   |
-                        git clone https://github.com/pyenv/pyenv.git /tmp/pyenv
-                        if [ ! -d "$HOME/.pyenv" ]; then mkdir -p ~/.pyenv ; fi
-                        cp -R /tmp/pyenv/* ~/.pyenv
-                        export PYENV_ROOT="$HOME/.pyenv"
-                        export PATH="$PYENV_ROOT/bin:$PATH"
-                        echo 'export PYENV_ROOT=$HOME/.pyenv' >> $BASH_ENV
-                        echo 'export PATH=$PYENV_ROOT/bin:$PATH' >> $BASH_ENV                    
-                        eval "$(pyenv init -)"
-                        bash .ci/deps.pip.sh
-        - run:
-            name: JavaDependencies
-            command: bash .ci/deps.java.sh
-        - run:
-            name: OpamDependencies
-            command:   bash .ci/deps.opam.sh
-        - run:
-            name: RDependencies
-            command:   bash .ci/deps.r.sh
-        - run:
-            name: CoalaDependencies
-            command:   bash .ci/deps.coala-bears.sh
-        - run:
-            name: Codecov
-            when: always
-            command: codecov
-        - run:
-            name: Coalaci
-            when: always
-            command: coala-ci -L DEBUG
-        - run:
-            name: Setup
-            when: always
-            command: python setup.py bdist_wheel
-        - run:
-            name: AllDependencies
-            when: always
-            command: |
-                        pip install $(ls ./dist/*.whl)"[alldeps]"
-        - run:
-            name: Documents
-            when: always
-            command: |
-                        echo $CIRCLE_NODE_INDEX
-                        if [ $CIRCLE_NODE_INDEX == 1 ] ; then
-                        pip install -r docs-requirements.txt
-                        fi
-        - run:
-            name: SetupDocs
-            when: always
-            command: |
-                        echo $CIRCLE_NODE_INDEX
-                        if [ $CIRCLE_NODE_INDEX == 1 ] ; then
-                            python setup.py docs
-                        fi
-        - run:
-            name: Tests
-            when: always
-            command: bash .ci/tests.sh
+            - checkout
+            - restore_cache:
+                key: dependency-cache-{{checksum "requirements.txt"}}
 
-        - save_cache:
-            key: dependency-cache-{{ checksum "requirements.txt"}}
-            paths:
-                - "docs/_build"
-                - "$HOME/.pyenv/versions/3.4.3"
-                - "$HOME/.pyenv/versions/3.5.1"
-                - "$HOME/coala-bears/node_modules"
-                - "$HOME/coala-bears/.bundle"
-                - "$HOME/coala-bears/vendor"
-                - "$HOME/.RLibrary"
-                - "$HOME/dart-sdk/bin"
-                - "$HOME/.cabal"
-                - "$HOME/.ghc"
-                - "$HOME/.ghc-mod"
-                - "$HOME/infer-linux64-v0.7.0"
-                - "$HOME/nltk_data"
-                - "$HOME/pmd-bin-5.4.1"
-                - "$HOME/.local/share/coala-bears"
-                - "$HOME/bakalint-0.4.0"
-                - "$HOME/.julia"
-                - "$HOME/.local/tailor/"
-                - "$HOME/.venv"
-    python-3.5:
-        docker:
-            - image: circleci/jdk8:0.1.1
+            - run:
+                name: dependencies
+                command: |
+                            sudo apt-get update
+                            sudo apt-get install -y software-properties-common python-software-properties curl
+                            sudo add-apt-repository -y ppa:hvr/ghc
+                            sudo add-apt-repository -y ppa:ubuntu-toolchain-r/test
+                            sudo add-apt-repository -y ppa:avsm/ppa
+                            curl -sL https://deb.nodesource.com/setup_8.x | sudo -E bash  -
+                            curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | sudo apt-key add -
+                            echo "deb https://dl.yarnpkg.com/debian/ stable main" | sudo tee /etc/apt/sources.list.d/yarn.list
+                            sudo apt-get update
+                            sudo apt-get install -y python3.4-venv git bzip2 \
+                            cabal-install-1.24 clang-3.4 libreadline-dev libyaml-dev\
+                            gfortran ghc happy indent libblas-dev liblapack-dev \
+                            libperl-critic-perl libxml2-utils menhir php-codesniffer \
+                            build-essential ruby texinfo libbz2-dev libcurl4-openssl-dev \
+                            libexpat-dev libncurses-dev zlib1g-dev git-core libssl-dev \
+                            libsqlite3-dev sqlite3 libxslt1-dev libffi-dev yarn python3-dev \
+                            libgdbm-dev libncurses5-dev automake libtool bison
 
-        steps: *build
+            - run:
+                name: virtual-env
+                command: |
+                            if [ ! -d "$HOME/.venv" ]; then
+                            python3 -m venv ~/.venv
+                            fi
+                            echo 'source $HOME/.venv/bin/activate' >> $BASH_ENV
+
+            - run:
+                name: pre
+                command: |
+                            sudo rm -rf /var/cache/apt/archives
+                            sudo ln -s $HOME/.apt-cache /var/cache/apt/archives
+                            mkdir -p $HOME/.apt-cache/partial
+                            mkdir -p $HOME/.RLibrary
+                            curl -o- https://raw.githubusercontent.com/creationix/nvm/v0.33.8/install.sh | bash
+                            export "NVM_DIR=$HOME/.nvm"
+                            [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+                            nvm install 6.10.2
+                            nvm alias default node
+                            echo 'export PATH=/usr/lib/go-1.9/bin:$PATH' >> $BASH_ENV
+                            echo 'export NVM_DIR=$HOME/.nvm' >> $BASH_ENV
+                            echo 'source $NVM_DIR/nvm.sh' >> $BASH_ENV
+                            echo 'export CIRCLE_BUILD_IMAGE=ubuntu-12.04' >> $BASH_ENV
+                            echo 'export PATH=/opt/cabal/bin:$PATH' >> $BASH_ENV
+                            echo 'export PATH=$HOME/coala-bears/node_modules/.bin:$PATH' >> $BASH_ENV
+                            echo 'export PATH=$HOME/coala-bears/vendor/bin:$PATH' >> $BASH_ENV
+                            echo 'export LINTR_COMMENT_BOT=false' >> $BASH_ENV
+                            echo 'export PATH=$HOME/dart-sdk/bin:$PATH' >> $BASH_ENV
+                            echo 'export PATH=$HOME/.cabal/bin:$PATH' >> $BASH_ENV
+                            echo 'export PATH=$HOME/infer-linux64-v0.7.0/infer/bin:$PATH' >> $BASH_ENV
+                            echo 'export PATH=$HOME/pmd-bin-5.4.1/bin:$PATH' >> $BASH_ENV
+                            echo 'export PATH=$HOME/bakalint-0.4.0:$PATH' >> $BASH_ENV
+                            echo 'export PATH=$HOME/elm-format-0.18:$PATH' >> $BASH_ENV
+                            echo 'export PATH=$HOME/.local/tailor/tailor-latest/bin:$PATH' >> $BASH_ENV
+                            echo 'export PATH=$HOME/phpmd:$PATH' >> $BASH_ENV
+                            echo 'export R_LIB_USER=$HOME/.RLibrary' >> $BASH_ENV
+
+            - run:
+                name: AptDependencies
+                command:  bash .ci/deps.apt.sh
+
+            - run:
+                name: GeneralDependencies
+                command: |
+                            gpg --keyserver hkp://keys.gnupg.net --recv-keys 409B6B1796C275462A1703113804BB82D39DC0E3 7D2BAF1CF37B13E2069D6956105BD0E739499BDB
+                            curl -sSL https://get.rvm.io | bash -s stable
+                            source /etc/profile.d/rvm.sh
+                            rvm install 2.2.2
+                            rvm use 2.2.2 --default
+                            ruby -v
+                            gem install bundler
+                            bash .ci/deps.sh
+
+            - run:
+                name: CabalDependencies
+                command:  bash .ci/deps.cabal.sh
+
+            - run:
+                name: DependenciesPip
+                command:   |
+                            git clone https://github.com/pyenv/pyenv.git /tmp/pyenv
+                            if [ ! -d "$HOME/.pyenv" ]; then mkdir -p ~/.pyenv ; fi
+                            cp -R /tmp/pyenv/* ~/.pyenv
+                            export PYENV_ROOT="$HOME/.pyenv"
+                            export PATH="$PYENV_ROOT/bin:$PATH"
+                            echo 'export PYENV_ROOT=$HOME/.pyenv' >> $BASH_ENV
+                            echo 'export PATH=$PYENV_ROOT/bin:$PATH' >> $BASH_ENV
+                            eval "$(pyenv init -)"
+                            bash .ci/deps.pip.sh
+
+            - run:
+                name: JavaDependencies
+                command: bash .ci/deps.java.sh
+
+            - run:
+                name: OpamDependencies
+                command:   bash .ci/deps.opam.sh
+
+            - run:
+                name: RDependencies
+                command:   bash .ci/deps.r.sh
+
+            - run:
+                name: CoalaDependencies
+                command:   bash .ci/deps.coala-bears.sh
+
+            - run:
+                name: Codecov
+                when: always
+                command: codecov
+
+            - run:
+                name: Coalaci
+                when: always
+                command: coala-ci -L DEBUG
+
+            - run:
+                name: Setup
+                when: always
+                command: python setup.py bdist_wheel
+
+            - run:
+                name: AllDependencies
+                when: always
+                command: |
+                            pip install $(ls ./dist/*.whl)"[alldeps]"
+
+            - run:
+                name: Documents
+                when: always
+                command: |
+                            echo $CIRCLE_NODE_INDEX
+                            if [ $CIRCLE_NODE_INDEX == 1 ] ; then
+                            pip install -r docs-requirements.txt
+                            fi
+
+            - run:
+                name: SetupDocs
+                when: always
+                command: |
+                            echo $CIRCLE_NODE_INDEX
+                            if [ $CIRCLE_NODE_INDEX == 1 ] ; then
+                                python setup.py docs
+                            fi
+
+            - run:
+                name: Tests
+                when: always
+                command: bash .ci/tests.sh
+
+            - save_cache:
+                key: dependency-cache-{{ checksum "requirements.txt"}}
+                paths:
+                    - "docs/_build"
+                    - "$HOME/.pyenv/versions/3.4.3"
+                    - "$HOME/.pyenv/versions/3.5.1"
+                    - "$HOME/coala-bears/node_modules"
+                    - "$HOME/coala-bears/.bundle"
+                    - "$HOME/coala-bears/vendor"
+                    - "$HOME/.RLibrary"
+                    - "$HOME/dart-sdk/bin"
+                    - "$HOME/.cabal"
+                    - "$HOME/.ghc"
+                    - "$HOME/.ghc-mod"
+                    - "$HOME/infer-linux64-v0.7.0"
+                    - "$HOME/nltk_data"
+                    - "$HOME/pmd-bin-5.4.1"
+                    - "$HOME/.local/share/coala-bears"
+                    - "$HOME/bakalint-0.4.0"
+                    - "$HOME/.julia"
+                    - "$HOME/.local/tailor/"
+                    - "$HOME/.venv"
 
 workflows:
     version: 2
     test:
         jobs:
             - python-3.4
-            - python-3.5
