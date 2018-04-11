@@ -54,7 +54,7 @@ jobs:
                         echo 'export PATH=/opt/cabal/bin:$PATH' >> $BASH_ENV
                         echo 'export PATH=$HOME/coala-bears/node_modules/.bin:$PATH' >> $BASH_ENV
                         echo 'export PATH=$HOME/coala-bears/vendor/bin:$PATH' >> $BASH_ENV
-                        echo 'export LINTR_COMMENT_BOT=false:$PATH' >> $BASH_ENV
+                        echo 'export LINTR_COMMENT_BOT=false' >> $BASH_ENV
                         echo 'export PATH=$HOME/dart-sdk/bin:$PATH' >> $BASH_ENV
                         echo 'export PATH=$HOME/.cabal/bin:$PATH' >> $BASH_ENV
                         echo 'export PATH=$HOME/infer-linux64-v0.7.0/infer/bin:$PATH' >> $BASH_ENV
