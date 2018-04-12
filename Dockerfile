@@ -19,9 +19,6 @@ RUN apt-get install -y python3.4-venv git bzip2 \
     libsqlite3-dev sqlite3 libxslt1-dev libffi-dev yarn python3-dev \
     libgdbm-dev libncurses5-dev automake libtool bison
 
-
-RUN  python3 -m venv ~/.venv && . $HOME/.venv/bin/activate
-
 ENV HOME=/root
 RUN   rm -rf /var/cache/apt/archives
 RUN   ln -s $HOME/.apt-cache /var/cache/apt/archives
@@ -34,7 +31,6 @@ RUN . $NVM_DIR/nvm.sh && nvm alias default node
 
 RUN . $NVM_DIR/nvm.sh
 ENV PATH=/usr/lib/go-1.9/bin:$PATH
-ENV NVM_DIR=$HOME/.nvm
 ENV CIRCLE_BUILD_IMAGE=ubuntu-12.04
 ENV PATH=/opt/cabal/bin:$PATH
 ENV PATH=$HOME/coala-bears/node_modules/.bin:$PATH
@@ -48,7 +44,7 @@ ENV PATH=$HOME/bakalint-0.4.0:$PATH
 ENV PATH=$HOME/elm-format-0.18:$PATH
 ENV PATH=$HOME/.local/tailor/tailor-latest/bin:$PATH
 ENV PATH=$HOME/phpmd:$PATH
-ENV R_LIB_USER=$HOME/.RLibrary:$PATH
+ENV R_LIB_USER=$HOME/.RLibrary
 
 RUN bash .ci/deps.apt.sh
 
