@@ -10,7 +10,7 @@ case $CIRCLE_NODE_INDEX in
  -1) dep_versions=( ) ;;  # set by .travis.yml
  *) dep_versions=( "3.5.1" ) ;;
 esac
-
+python --version
 for dep_version in "${dep_versions[@]}" ; do
   pyenv install -ks $dep_version
   pyenv local $dep_version 2.7.10
