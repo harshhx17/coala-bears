@@ -36,14 +36,6 @@ jobs:
                             libncursesw5-dev libc6-dev tk-dev
 
             - run:
-                name: virtual-env
-                command: |
-                            if [ ! -d "$HOME/.venv" ]; then
-                            python3 -m venv ~/.venv
-                            fi
-                            echo 'source $HOME/.venv/bin/activate' >> $BASH_ENV
-
-            - run:
                 name: pre
                 command: |
                             sudo rm -rf /var/cache/apt/archives
@@ -91,9 +83,9 @@ jobs:
                             gem install bundler
                             bash .ci/deps.sh
 
-            - run:
-                name: cabalDependencies
-                command:  bash .ci/deps.cabal.sh
+            # - run:
+            #     name: cabalDependencies
+            #     command:  bash .ci/deps.cabal.sh
 
             - run:
                 name: dependenciesPip
