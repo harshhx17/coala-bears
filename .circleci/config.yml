@@ -10,7 +10,7 @@ jobs:
         steps: &build
             - checkout
             - restore_cache:
-                key: dependency-cache-{{checksum "requirements.txt"}}
+                key: coala-bears-cache-{{checksum "requirements.txt"}}
 
             - run:
                 name: dependencies
@@ -35,22 +35,8 @@ jobs:
                             libncursesw5-dev libc6-dev tk-dev
 
             - run:
-                name: virtual-env
-                command: |
-                            if [ ! -d "$HOME/.venv" ]; then
-                            python3 -m venv ~/.venv
-                            fi
-                            echo 'source $HOME/.venv/bin/activate' >> $BASH_ENV
-
-            - run:
                 name: pre
                 command: |
-                            wget https://www.python.org/ftp/python/2.7.10/Python-2.7.10.tgz
-                            tar -zxvf  Python-2.7.10.tgz
-                            sudo ./Python-2.7.10/configure
-                            sudo make install #can also try sudo make install(will remove python2.7.6)
-                            which python
-                            python2.7 --version
                             sudo rm -rf /var/cache/apt/archives
                             sudo ln -s $HOME/.apt-cache /var/cache/apt/archives
                             mkdir -p $HOME/.apt-cache/partial
@@ -150,10 +136,6 @@ jobs:
                 command: pip install $(ls ./dist/*.whl)"[alldeps]"
 
             - run:
-                name: tests
-                when: always
-                command: bash .ci/tests.sh
-            - run:
                 name: sphinx-build
                 when: always
                 command: |
@@ -163,28 +145,14 @@ jobs:
                             fi
 
             - save_cache:
-                key: dependency-cache-{{ checksum "requirements.txt"}}
+                key: coala-bears-cache-{{ checksum "requirements.txt"}}
                 paths:
-                    - "docs/_build"
-                    - "$HOME/.pyenv/versions/3.4.3"
-                    - "$HOME/.pyenv/versions/3.5.1"
-                    - "$HOME/coala-bears/node_modules"
-                    - "$HOME/coala-bears/.bundle"
-                    - "$HOME/coala-bears/vendor"
                     - "$HOME/.RLibrary"
-                    - "$HOME/dart-sdk/bin"
-                    - "$HOME/.cabal"
-                    - "$HOME/.ghc"
-                    - "$HOME/.ghc-mod"
-                    - "$HOME/infer-linux64-v0.7.0"
-                    - "$HOME/nltk_data"
-                    - "$HOME/pmd-bin-5.4.1"
-                    - "$HOME/.local/share/coala-bears"
-                    - "$HOME/bakalint-0.4.0"
-                    - "$HOME/.julia"
-                    - "$HOME/.local/tailor/"
-                    - "$HOME/.venv"
 
+            - run:
+                name: tests
+                when: always
+                command: bash .ci/tests.sh
     python-3.4:
         docker:
             - image: circleci/jdk8:0.1.1
