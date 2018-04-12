@@ -11,6 +11,7 @@ case $CIRCLE_NODE_INDEX in
  *) dep_versions=( "3.5.1" ) ;;
 esac
 python --version
+pyenv install -ks 2.7.10
 for dep_version in "${dep_versions[@]}" ; do
   pyenv install -ks $dep_version
   pyenv local $dep_version 2.7.10
