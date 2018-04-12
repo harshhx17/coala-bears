@@ -35,6 +35,14 @@ jobs:
                             libncursesw5-dev libc6-dev tk-dev
 
             - run:
+                name: virtual-env
+                command: |
+                            if [ ! -d "$HOME/.venv" ]; then
+                            python3 -m venv ~/.venv
+                            fi
+                            echo 'source $HOME/.venv/bin/activate' >> $BASH_ENV
+
+            - run:
                 name: pre
                 command: |
                             sudo rm -rf /var/cache/apt/archives
@@ -145,27 +153,12 @@ jobs:
                             fi
 
             - save_cache:
-                key: dependency-cache-{{checksum "requirements.txt"}}
+                key: coala-bears-cache-{{checksum "requirements.txt"}}
                 paths:
                     - "docs/_build"
-                    - "$HOME/.pyenv/versions/3.4.3"
-                    - "$HOME/.pyenv/versions/3.5.1"
-                    - "$HOME/coala-bears/node_modules"
-                    - "$HOME/coala-bears/.bundle"
-                    - "$HOME/coala-bears/vendor"
                     - "$HOME/.RLibrary"
-                    - "$HOME/dart-sdk/bin"
                     - "$HOME/.cabal"
-                    - "$HOME/.ghc"
-                    - "$HOME/.ghc-mod"
-                    - "$HOME/infer-linux64-v0.7.0"
                     - "$HOME/nltk_data"
-                    - "$HOME/pmd-bin-5.4.1"
-                    - "$HOME/.local/share/coala-bears"
-                    - "$HOME/bakalint-0.4.0"
-                    - "$HOME/.julia"
-                    - "$HOME/.local/tailor/"
-                    - "$HOME/.venv"
 
             - run:
                 name: tests
