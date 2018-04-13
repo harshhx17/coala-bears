@@ -9,15 +9,10 @@ export DEBIAN_FRONTEND=noninteractive
 deps="libclang1-3.4 indent mono-mcs chktex r-base julia golang-go luarocks verilator cppcheck flawfinder devscripts mercurial"
 deps_infer="m4 opam"
 
-case $CIRCLE_BUILD_IMAGE in
-  "ubuntu-12.04")
+if [ $CIRCLECI ]; then
     USE_PPAS="true"
     deps=${deps/golang-go/}
     deps="$deps golang-1.9-go";;
-esac
-
-if [ -n "$ADD_APT_UBUNTU_RELEASE" ]; then
-  echo "deb http://archive.ubuntu.com/ubuntu/ $ADD_APT_UBUNTU_RELEASE main universe" | sudo tee -a /etc/apt/sources.list.d/$ADD_APT_UBUNTU_RELEASE.list > /dev/null
 fi
 
 if [ "$USE_PPAS" = "true" ]; then
