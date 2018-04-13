@@ -76,9 +76,9 @@ jobs:
                             gem install bundler
                             bash .ci/deps.sh
 
-            # - run:
-            #     name: cabalDependencies
-            #     command:  bash .ci/deps.cabal.sh
+            - run:
+                name: cabalDependencies
+                command:  bash .ci/deps.cabal.sh
 
             - run:
                 name: dependenciesPip
@@ -106,40 +106,40 @@ jobs:
                 name: RDependencies
                 command:   bash .ci/deps.r.sh
 
-            # - run:
-            #     name: bearsDependencies
-            #     command:   bash .ci/deps.coala-bears.sh
+            - run:
+                name: bearsDependencies
+                command:   bash .ci/deps.coala-bears.sh
 
-            # - run:
-            #     name: codecov
-            #     when: always
-            #     command: codecov
+            - run:
+                name: codecov
+                when: always
+                command: codecov
 
-            # - run:
-            #     name: coala-ci
-            #     when: always
-            #     command: coala-ci -L DEBUG
+            - run:
+                name: coala-ci
+                when: always
+                command: coala-ci -L DEBUG
 
-            # - run:
-            #     name: setup
-            #     when: always
-            #     command: python setup.py bdist_wheel
+            - run:
+                name: setup
+                when: always
+                command: python setup.py bdist_wheel
 
-            # - run:
-            #     name: allDependencies
-            #     when: always
-            #     command: pip install $(ls ./dist/*.whl)"[alldeps]"
+            - run:
+                name: allDependencies
+                when: always
+                command: pip install $(ls ./dist/*.whl)"[alldeps]"
 
-            # - run:
-            #     name: sphinx-build
-            #     when: always
-            #     command: |
-            #                 if [ $CIRCLE_JOB == "python-3.4" ] ; then
-            #                     python setup.py docs
-            #                 fi
+            - run:
+                name: sphinx-build
+                when: always
+                command: |
+                            if [ $CIRCLE_JOB == "python-3.4" ] ; then
+                                python setup.py docs
+                            fi
 
             - save_cache:
-                key: coala-bears-{{checksum "requirements.txt"}}
+                key: coala-bears-dep-{{checksum "requirements.txt"}}
                 paths:
                     - "docs/_build"
                     - "../.pyenv"
@@ -153,11 +153,11 @@ jobs:
                     - "../bakalint-0.4.0"
                     - "../.julia"
                     - "../.local/tailor"
-                    # - "project/vendor"
-                    # - "project/.bundle"
-                    # - "project/node_modules"
-                    # - "../.ghc"
-                    # - "../.ghc-mod"
+                    - "project/vendor"
+                    - "project/.bundle"
+                    - "project/node_modules"
+                    - "../.ghc"
+                    - "../.ghc-mod"
 
             - run:
                 name: tests
