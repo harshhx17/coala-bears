@@ -1,7 +1,7 @@
 set -e
 set -x
 
-export TERM=dumb
+TERM=dumb
 
 # Infer commands
 if [ ! -e ~/infer-linux64-v0.7.0/infer/bin ]; then
