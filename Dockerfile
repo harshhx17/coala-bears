@@ -30,12 +30,13 @@ RUN . $NVM_DIR/nvm.sh && nvm install 6.10.2
 RUN . $NVM_DIR/nvm.sh && nvm alias default node
 
 RUN . $NVM_DIR/nvm.sh
+ENV CIRCLECI=true
+ENV CIRCLE_JOB="python-3.5"
 ENV PATH=/usr/lib/go-1.9/bin:$PATH
-ENV CIRCLE_BUILD_IMAGE=ubuntu-12.04
 ENV PATH=/opt/cabal/bin:$PATH
 ENV PATH=$HOME/coala-bears/node_modules/.bin:$PATH
 ENV PATH=$HOME/coala-bears/vendor/bin:$PATH
-ENV LINTR_COMMENT_BOT=false:$PATH
+ENV LINTR_COMMENT_BOT=false
 ENV PATH=$HOME/dart-sdk/bin:$PATH
 ENV PATH=$HOME/.cabal/bin:$PATH
 ENV PATH=$HOME/infer-linux64-v0.7.0/infer/bin:$PATH

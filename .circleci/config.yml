@@ -1,13 +1,13 @@
 version: 2
 jobs:
-    python-3.5:
+    python-3.5: &build
         docker:
             - image: circleci/jdk8:0.1.1
 
-        steps: &build
+        steps:
             - checkout
             - restore_cache:
-                key: dependency-cache-{{checksum "requirements.txt"}}
+                key: coala-bears-cache-{{checksum "requirements.txt"}}
 
             - run:
                 name: dependencies
@@ -150,14 +150,7 @@ jobs:
                 when: always
                 command: bash .ci/tests.sh
 
-    python-3.4:
-        docker:
-            - image: circleci/jdk8:0.1.1
-
-        environment:
-            CIRCLE_NODE_INDEX: 1
-
-        steps: *build
+    python-3.4: *build
 
 workflows:
     version: 2
