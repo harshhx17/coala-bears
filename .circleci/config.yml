@@ -7,8 +7,7 @@ jobs:
         steps:
             - checkout
             - restore_cache:
-                key: coala-bears-{{checksum "requirements.txt"}}
-
+                key: coala-bears-dep-{{checksum "requirements.txt"}}
             - run:
                 name: dependencies
                 command: |
