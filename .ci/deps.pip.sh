@@ -5,17 +5,13 @@ TERM=dumb
 
 # Choose the python versions to install deps for
 case $CIRCLE_JOB in
-  "python-3.5")
-    dep_versions=( "3.4.3" "3.5.1" )
-    pyenv install -ks 2.7.10;;
-  "python-3.4")
-    dep_versions=( "3.4.3" )
-    pyenv install -ks 2.7.10;;
-  "travis")
-    dep_versions=( ) ;;  # set by .travis.yml
-  *)
-    dep_versions=( "3.5.1" ) ;;
+  "python-3.5") dep_versions=( "3.4.3" "3.5.1" );;
+  "python-3.4") dep_versions=( "3.4.3" );;
+  *)  dep_versions=( "3.5.1" );;
 esac
+
+pyenv install -ks 2.7.10
+
 for dep_version in "${dep_versions[@]}" ; do
   pyenv install -ks $dep_version
   pyenv local $dep_version 2.7.10
