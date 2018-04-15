@@ -90,18 +90,6 @@ jobs:
                 command:  bash .ci/deps.cabal.sh
 
             - run:
-                name: RDependencies
-                command:   bash .ci/deps.r.sh
-
-            - run:
-                name: opamDependencies
-                command:   bash .ci/deps.opam.sh
-
-            - run:
-                name: javaDependencies
-                command: bash .ci/deps.java.sh
-
-            - run:
                 name: dependenciesPip
                 command: |
                   if [ ! -d "$HOME/.pyenv" ]; then
@@ -116,8 +104,30 @@ jobs:
                   bash .ci/deps.pip.sh
 
             - run:
+                name: javaDependencies
+                command: bash .ci/deps.java.sh
+
+            - run:
+                name: opamDependencies
+                command:   bash .ci/deps.opam.sh
+
+            - run:
+                name: RDependencies
+                command:   bash .ci/deps.r.sh
+
+            - run:
                 name: bearsDependencies
                 command:   bash .ci/deps.coala-bears.sh
+
+            - run:
+                name: codecov
+                when: always
+                command: codecov
+
+            - run:
+                name: coala-ci
+                when: always
+                command: coala-ci -L DEBUG
 
             - run:
                 name: setup
@@ -130,22 +140,17 @@ jobs:
                 command: pip install $(ls ./dist/*.whl)"[alldeps]"
 
             - run:
-                name: coala-ci
-                when: always
-                command: coala-ci -L DEBUG
-
-            - run:
-                name: codecov
-                when: always
-                command: codecov
-
-            - run:
                 name: sphinx-build
                 when: always
                 command: |
                   if [ $CIRCLE_JOB == "python-3.4" ] ; then
                       python setup.py docs
                   fi
+
+            - run:
+                name: tests
+                when: always
+                command: bash .ci/tests.sh
 
             - save_cache:
                 key: coala-bears-dep-{{checksum "requirements.txt"}}
@@ -167,11 +172,6 @@ jobs:
                   - "project/node_modules"
                   - "../.ghc"
                   - "../.ghc-mod"
-
-            - run:
-                name: tests
-                when: always
-                command: bash .ci/tests.sh
 
     python-3.4: *build
 
