@@ -90,6 +90,18 @@ jobs:
                 command:  bash .ci/deps.cabal.sh
 
             - run:
+                name: RDependencies
+                command:   bash .ci/deps.r.sh
+
+            - run:
+                name: opamDependencies
+                command:   bash .ci/deps.opam.sh
+
+            - run:
+                name: javaDependencies
+                command: bash .ci/deps.java.sh
+
+            - run:
                 name: dependenciesPip
                 command: |
                   if [ ! -d "$HOME/.pyenv" ]; then
@@ -104,30 +116,8 @@ jobs:
                   bash .ci/deps.pip.sh
 
             - run:
-                name: javaDependencies
-                command: bash .ci/deps.java.sh
-
-            - run:
-                name: opamDependencies
-                command:   bash .ci/deps.opam.sh
-
-            - run:
-                name: RDependencies
-                command:   bash .ci/deps.r.sh
-
-            - run:
                 name: bearsDependencies
                 command:   bash .ci/deps.coala-bears.sh
-
-            - run:
-                name: codecov
-                when: always
-                command: codecov
-
-            - run:
-                name: coala-ci
-                when: always
-                command: coala-ci -L DEBUG
 
             - run:
                 name: setup
@@ -138,6 +128,16 @@ jobs:
                 name: allDependencies
                 when: always
                 command: pip install $(ls ./dist/*.whl)"[alldeps]"
+
+            - run:
+                name: coala-ci
+                when: always
+                command: coala-ci -L DEBUG
+
+            - run:
+                name: codecov
+                when: always
+                command: codecov
 
             - run:
                 name: sphinx-build
