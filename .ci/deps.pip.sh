@@ -2,7 +2,7 @@ set -e
 set -x
 
 TERM=dumb
-
+pwd
 # Choose the python versions to install deps for
 case $CIRCLE_JOB in
   "python-3.5") dep_versions=( "3.4.3" "3.5.1" );;

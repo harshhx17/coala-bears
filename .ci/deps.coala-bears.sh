@@ -2,7 +2,7 @@
 
 set -x
 set -e
-
+pwd
 # making coala cache the dependencies downloaded upon first run
 echo '' > /tmp/dummy
 which coala
