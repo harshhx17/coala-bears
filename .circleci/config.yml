@@ -67,7 +67,7 @@ jobs:
                   echo 'export PATH=$HOME/.local/tailor/tailor-latest/bin:$PATH' >> $BASH_ENV
                   echo 'export PATH=$HOME/phpmd:$PATH' >> $BASH_ENV
                   echo 'export R_LIB_USER=$HOME/.RLibrary' >> $BASH_ENV
-
+                  echo 'export PATH=$HOME/project/node_modules/.bin:$PATH' >> $BASH_ENV
             - run:
                 name: aptDependencies
                 command:  bash .ci/deps.apt.sh
