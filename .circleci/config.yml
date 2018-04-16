@@ -86,6 +86,7 @@ jobs:
                   gem install bundler
                   bash .ci/deps.sh
                   bundle install
+                  echo 'export PATH=$HOME/project/node_modules/.bin:$PATH' >> $BASH_ENV
 #might  need to remove bundle install command
             - run:
                 name: cabalDependencies
