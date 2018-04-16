@@ -84,9 +84,9 @@ jobs:
                   rvm use 2.2.2 --default
                   ruby -v
                   gem install bundler
-                  bundle install
                   bash .ci/deps.sh
-
+                  bundle install
+#might  need to remove bundle install command
             - run:
                 name: cabalDependencies
                 command:  bash .ci/deps.cabal.sh
