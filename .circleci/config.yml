@@ -69,7 +69,7 @@ jobs:
                   echo 'export R_LIB_USER=$HOME/.RLibrary' >> $BASH_ENV
                   echo 'export PATH=/usr/local/rvm/gems/ruby-2.2.2/bin:$PATH' >> $BASH_ENV
 
-                  - run:
+            - run:
                 name: aptDependencies
                 command:  bash .ci/deps.apt.sh
 
