@@ -16,6 +16,8 @@ case $CIRCLE_BUILD_IMAGE in
     sudo mv /usr/local/go /usr/local/circleci-go
     ;;
   "ubuntu-14.04")
+    sudo apt-get update
+    sudo apt-get install ocaml ocaml-native-compilers camlp4-extra opam -y
     # Use xenial, needed to replace outdated julia provided by Circle CI
     ADD_APT_UBUNTU_RELEASE=xenial
     # Work around lack of systemd on trusty, which xenial's lxc-common expects
