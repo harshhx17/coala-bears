@@ -7,7 +7,6 @@ TERM=dumb
 export DEBIAN_FRONTEND=noninteractive
 
 deps="libclang1-3.4 indent mono-mcs chktex r-base julia golang-go luarocks verilator cppcheck flawfinder devscripts"
-deps_infer="m4 opam"
 
 case $CIRCLE_BUILD_IMAGE in
   "ubuntu-12.04")
@@ -17,7 +16,7 @@ case $CIRCLE_BUILD_IMAGE in
     ;;
   "ubuntu-14.04")
     sudo apt-get update
-    sudo apt-get install ocaml ocaml-native-compilers camlp4-extra opam -y
+    sudo apt-get install ocaml ocaml-native-compilers camlp4-extra opam aspcud camlp4 m4 -y
     # Use xenial, needed to replace outdated julia provided by Circle CI
     ADD_APT_UBUNTU_RELEASE=xenial
     # Work around lack of systemd on trusty, which xenial's lxc-common expects
@@ -32,13 +31,11 @@ case $CIRCLE_BUILD_IMAGE in
     # but for reasons unknown it fails on trusty without gfortran-4.9
     deps="$deps gfortran-4.9"
     # Add extra infer deps
-    deps_infer="$deps_infer ocaml camlp4"
     # opam install --deps-only --yes infer fails with
     #  Fatal error:
     #  Stack overflow
     # aspcud is an external dependency resolver, and is the recommended
     # solution: https://github.com/ocaml/opam/issues/2507
-    deps_infer="$deps_infer aspcud"
     ;;
 esac
 
@@ -61,7 +58,7 @@ fi
 deps_perl="perl libperl-critic-perl"
 
 sudo apt-get -y update
-sudo apt-get -y --no-install-recommends install $deps $deps_perl $deps_infer
+sudo apt-get -y --no-install-recommends install $deps $deps_perl
 
 # On Trusty, g++ & gfortran 4.9 need activating for R lintr dependency irlba.
 ls -al /usr/bin/gcc* /usr/bin/g++* /usr/bin/gfortran* || true
