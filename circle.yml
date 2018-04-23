@@ -38,8 +38,8 @@ dependencies:
     - mkdir -p ~/.RLibrary
     - nvm alias default node
   override:
-    - bash .ci/deps.opam.sh
     - bash .ci/deps.apt.sh
+    - bash .ci/deps.opam.sh
     - bash .ci/deps.pip.sh
     - bash .ci/deps.java.sh
     - bash .ci/deps.r.sh
