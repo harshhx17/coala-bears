@@ -3,11 +3,10 @@ set -x
 
 export TERM=dumb
 
-wget http://download.opensuse.org/repositories/home:ocaml/Debian_7.0/Release.key
-sudo apt-key add - < Release.key
-sudo echo 'deb http://download.opensuse.org/repositories/home:/ocaml/Debian_7.0/ /' >> /etc/apt/sources.list.d/opam.list
+sudo add-apt-repository -y ppa:avsm/ppa
 sudo apt-get update
-sudo apt-get install ocaml ocaml-native-compilers camlp4-extra aspcud camlp4 m4 -y
+sudo apt-get install -y ocaml ocaml-native-compilers camlp4-extra opam aspcud camlp4 m4
+
 # Infer commands
 if [ ! -e ~/infer-linux64-v0.7.0/infer/bin ]; then
   wget -nc -O ~/infer.tar.xz https://github.com/facebook/infer/releases/download/v0.7.0/infer-linux64-v0.7.0.tar.xz
