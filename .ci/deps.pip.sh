@@ -7,7 +7,6 @@ TERM=dumb
 case $CIRCLE_NODE_INDEX in
  0) dep_versions=( "3.4.3" "3.5.1" ) ;;
  1) dep_versions=( "3.4.3" ) ;;
- -1) dep_versions=( ) ;;  # set by .travis.yml
  *) dep_versions=( "3.5.1" ) ;;
 esac
 
