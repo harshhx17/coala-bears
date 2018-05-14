@@ -12,6 +12,8 @@ jobs:
             - run:
                 name: dependencies
                 command: |
+                  echo 'export LANG=en_US.UTF-8' >> $BASH_ENV
+                  echo 'export LANGUAGE=en_US:en' >> $BASH_ENV
                   sudo apt-get update
                   sudo apt-get install -y software-properties-common python-software-properties curl
                   sudo add-apt-repository -y ppa:hvr/ghc
