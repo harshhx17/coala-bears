@@ -2,7 +2,6 @@ set -e
 set -x
 
 TERM=dumb
-pwd
 # apt-get commands
 export DEBIAN_FRONTEND=noninteractive
 

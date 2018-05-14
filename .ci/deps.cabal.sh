@@ -1,5 +1,4 @@
 set -e
-pwd
 # cabal-install 1.22 is the minimum tested version
 cabal --version
 
