@@ -89,10 +89,10 @@ jobs:
                   rvm install 2.2.2
                   rvm use 2.2.2 --default
                   ruby -v
+                  rvm rvmrc warning ignore /root/project/Gemfile
                   gem install bundler
                   bash .ci/deps.sh
-                  bundle install
-#might  need to remove bundle install command
+
             - run:
                 name: cabalDependencies
                 command:  bash .ci/deps.cabal.sh
@@ -107,8 +107,8 @@ jobs:
                   fi
                   echo 'export PYENV_ROOT=$HOME/.pyenv' >> $BASH_ENV
                   echo 'export PATH=$PYENV_ROOT/bin:$PATH' >> $BASH_ENV
+                  echo 'eval "$(pyenv init -)"' >> $BASH_ENV
                   source $BASH_ENV
-                  eval "$(pyenv init -)"
                   bash .ci/deps.pip.sh
 
             - run:

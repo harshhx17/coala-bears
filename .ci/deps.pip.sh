@@ -9,12 +9,11 @@ case $CIRCLE_JOB in
   *)  dep_versions=( "3.5.1" );;
 esac
 
-pyenv install -ks 2.7.10
-
 for dep_version in "${dep_versions[@]}" ; do
-  # ver=$(python --version 2>&1)
+  ver=$(python --version 2>&1)
+  for i in $ver;do version=$i;done
   pyenv install -ks $dep_version
-  pyenv local $dep_version 2.7.10
+  pyenv local $dep_version $version
   source .ci/env_variables.sh
 
   pip install pip==9.0.1
