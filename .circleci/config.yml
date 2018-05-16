@@ -14,6 +14,7 @@ jobs:
                 command: |
                   echo 'export LANG=en_US.UTF-8' >> $BASH_ENV
                   echo 'export LANGUAGE=en_US:en' >> $BASH_ENV
+                  echo 'export LC_ALL=en_US.UTF-8' >> $BASH_ENV
                   sudo apt-get update
                   sudo apt-get install -y software-properties-common python-software-properties curl
                   sudo add-apt-repository -y ppa:hvr/ghc
@@ -24,7 +25,7 @@ jobs:
                   echo "deb https://dl.yarnpkg.com/debian/ stable main" | sudo tee /etc/apt/sources.list.d/yarn.list
                   sudo apt-get update
                   sudo apt-get install -y python3.4-venv git bzip2 \
-                  cabal-install-1.24 clang-3.4 libreadline-dev \
+                  cabal-install-1.24 clang-3.4 libreadline-dev language-pack-en \
                   gfortran ghc happy indent libblas-dev liblapack-dev \
                   libperl-critic-perl libxml2-utils menhir php-codesniffer \
                   build-essential ruby texinfo libbz2-dev libcurl4-openssl-dev \
