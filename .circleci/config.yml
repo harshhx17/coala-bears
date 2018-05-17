@@ -107,7 +107,7 @@ jobs:
                   fi
                   echo 'export PYENV_ROOT=$HOME/.pyenv' >> $BASH_ENV
                   echo 'export PATH=$PYENV_ROOT/bin:$PATH' >> $BASH_ENV
-                  echo 'eval "$(pyenv init -)"' >> $BASH_ENV
+                  eval "$(pyenv init -)"
                   source $BASH_ENV
                   bash .ci/deps.pip.sh
 
@@ -158,7 +158,9 @@ jobs:
             - run:
                 name: tests
                 when: always
-                command: bash .ci/tests.sh
+                command: |
+                  eval "$(pyenv init -)"
+                  bash .ci/tests.sh
 
             - save_cache:
                 key: coala-bears-dep-{{checksum "requirements.txt"}}
