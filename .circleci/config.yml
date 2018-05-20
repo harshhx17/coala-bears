@@ -159,7 +159,6 @@ jobs:
                 name: tests
                 when: always
                 command: |
-                  eval "$(pyenv init -)"
                   bash .ci/tests.sh
 
             - save_cache:
