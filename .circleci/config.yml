@@ -7,7 +7,7 @@ jobs:
         steps:
             - checkout
             - restore_cache:
-                key: coala-bears-dep-{{checksum "requirements.txt"}}
+                  key: coala-bears-dep-{{checksum "requirements.txt"}}
 
             - run:
                 name: dependencies
@@ -16,23 +16,28 @@ jobs:
                   echo 'export LANGUAGE=en_US:en' >> $BASH_ENV
                   echo 'export LC_ALL=en_US.UTF-8' >> $BASH_ENV
                   sudo apt-get update
-                  sudo apt-get install -y software-properties-common python-software-properties curl
+                  sudo apt-get install -y software-properties-common \
+                  python-software-properties curl
                   sudo add-apt-repository -y ppa:hvr/ghc
                   sudo add-apt-repository -y ppa:ubuntu-toolchain-r/test
                   sudo add-apt-repository -y ppa:avsm/ppa
-                  curl -sL https://deb.nodesource.com/setup_8.x | sudo -E bash  -
-                  curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | sudo apt-key add -
-                  echo "deb https://dl.yarnpkg.com/debian/ stable main" | sudo tee /etc/apt/sources.list.d/yarn.list
+                  curl -sL https://deb.nodesource.com/setup_8.x | \
+                  sudo -E bash  -
+                  curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | \
+                  sudo apt-key add -
+                  echo "deb https://dl.yarnpkg.com/debian/ stable main" | \
+                  sudo tee /etc/apt/sources.list.d/yarn.list
                   sudo apt-get update
-                  sudo apt-get install -y python3.4-venv git bzip2 \
-                  cabal-install-1.24 clang-3.4 libreadline-dev language-pack-en \
+                  sudo apt-get install -y python3.4-venv git bzip2 sqlite3 \
+                  cabal-install-1.24 clang-3.4 libreadline-dev ruby \
                   gfortran ghc happy indent libblas-dev liblapack-dev \
                   libperl-critic-perl libxml2-utils menhir php-codesniffer \
-                  build-essential ruby texinfo libbz2-dev libcurl4-openssl-dev \
+                  build-essential texinfo libbz2-dev libcurl4-openssl-dev \
                   libexpat-dev libncurses-dev zlib1g-dev git-core libssl-dev \
-                  libsqlite3-dev sqlite3 libxslt1-dev libffi-dev yarn python3-dev \
+                  libsqlite3-dev libxslt1-dev libffi-dev yarn python3-dev \
                   libgdbm-dev libncurses5-dev automake libtool bison \
-                  libncursesw5-dev libc6-dev tk-dev
+                  libncursesw5-dev libc6-dev tk-dev ca-certificates \
+                  language-pack-en
 
             - run:
                 name: virtual-env
