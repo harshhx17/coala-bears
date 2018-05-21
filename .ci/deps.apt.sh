@@ -10,8 +10,6 @@ deps_infer="m4 opam"
 
 if [ $CIRCLECI ]; then
     USE_PPAS="true"
-    deps=${deps/golang-go/}
-    deps="$deps golang-1.9-go"
 fi
 
 if [ "$USE_PPAS" = "true" ]; then
